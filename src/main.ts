@@ -3,10 +3,9 @@ import {
 } from 'obsidian';
 import {
 	DEFAULT_SETTINGS,
-	DailyTrackerSettings,
-	SettingTab,
+	DailyTrackerSettings
 } from './settings';
-import TrackingView, {TRACKING_VIEW} from "./view";
+import TrackingView, {TRACKING_VIEW} from "./view/view";
 
 
 export default class DailyTracker extends Plugin {
@@ -23,8 +22,6 @@ export default class DailyTracker extends Plugin {
 		this.addRibbonIcon('dice', 'Sample', async (_evt: MouseEvent) => {
 			await this.activateView();
 		});
-
-		this.addSettingTab(new SettingTab(this.app, this));
 	}
 
 	onunload() {}

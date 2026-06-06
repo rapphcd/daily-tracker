@@ -1,4 +1,5 @@
 export type DailyLog = {
+	date: string;
 	summary: string;
 	habits: Record<string, boolean>;
 	workTime: number;
