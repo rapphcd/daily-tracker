@@ -1,16 +1,25 @@
 import DailyRecap from "./components/DailyRecap";
+import Stats from "./components/Stats";
 
 export function ReactView(){
 	return (
-		<div>
-			<h1>Daily Tracking</h1>
+		<div style={{
+			display: "flex",
+			flexDirection: "column",
+			gap: "0.5rem",
+			maxWidth: "100%",
+			overflow: "hidden"
+		}}>
+			<h1 style={{
+				marginBottom: "0",
+				marginTop: "0"
+			}}>Daily Tracking</h1>
+			<DailyRecap></DailyRecap>
 			<div style={{
-				backgroundColor: "var(--background-primary)",
-				borderRadius: "var(--radius-l)",
-				height: "fit-content",
-				padding: "0 1rem 1rem 1rem"
+				display: "flex",
+				gap: "0.5rem"
 			}}>
-				<DailyRecap></DailyRecap>
+				<Stats></Stats>
 			</div>
 		</div>
 	);

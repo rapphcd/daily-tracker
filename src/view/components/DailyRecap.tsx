@@ -29,7 +29,12 @@ function DailyRecap() {
 	}
 
 	return (
-		<div>
+		<div style={{
+			backgroundColor: "var(--background-primary)",
+			borderRadius: "var(--radius-l)",
+			height: "fit-content",
+			padding: "0 1rem 1.5rem 1rem"
+		}}>
 			{
 				todayLog != undefined && (
 					<div>
@@ -47,7 +52,7 @@ function DailyRecap() {
 										  width: "100%",
 										  height: "fit-content",
 										  resize: "none",
-										  borderColor: "var(--divider-color",
+										  borderColor: "lightgrey",
 										  backgroundColor: "var(--background-primary)",
 										  boxShadow: "none"
 									  }} onChange={(e) => {
@@ -105,16 +110,43 @@ function DailyRecap() {
 								alignItems: "center"
 							}}>
 								<h3 style={{
-									marginBottom: "8px"
+									marginBottom: "0"
 								}}>Work time</h3>
-								<input style={{
-									width: "min-content",
-									border: "none",
-									padding: 0,
-									boxShadow: "none",
-									backgroundColor: "var(--background-primary)"
-								}} type="number" name="worktime" id="worktime" min={0} step={0.5} max={24}
-								       value={todayLog.workTime} onChange={(e) => handleChange(e, "workTime")}/>
+								<div style={{
+									display: "flex",
+									justifyContent: "space-around",
+									alignItems: "center"
+								}}>
+									<div onClick={() => {
+										if (todayLog == undefined) return;
+
+										if (todayLog.workTime == 0) return;
+
+										saveTodayLog({
+											...todayLog,
+											workTime: todayLog.workTime-1
+										});
+									}}>-</div>
+									<input style={{
+										width: "min-content",
+										border: "none",
+										padding: 0,
+										boxShadow: "none",
+										backgroundColor: "var(--background-primary)",
+										textAlign: "center"
+									}} type="number" name="worktime" id="worktime" min={0} step={0.5} max={24}
+									       value={todayLog.workTime} onChange={(e) => handleChange(e, "workTime")}/>
+									<div onClick={() => {
+										if (todayLog == undefined) return;
+
+										if (todayLog.workTime == 24) return;
+
+										saveTodayLog({
+											...todayLog,
+											workTime: todayLog.workTime+1
+										});
+									}}>+</div>
+								</div>
 							</div>
 							<div style={{
 								width: "50%",
@@ -124,16 +156,43 @@ function DailyRecap() {
 								alignItems: "center"
 							}}>
 								<h3 style={{
-									marginBottom: "8px"
+									marginBottom: "0"
 								}}>Sleep time</h3>
-								<input style={{
-									width: "min-content",
-									border: "none",
-									padding: 0,
-									boxShadow: "none",
-									backgroundColor: "var(--background-primary)"
-								}} type="number" name="sleeptime" id="sleeptime" min={0} step={0.5} max={24}
-								       value={todayLog.sleepTime} onChange={(e) => handleChange(e, "sleepTime")}/>
+								<div style={{
+									display: "flex",
+									justifyContent: "space-around",
+									alignItems: "center"
+								}}>
+									<div onClick={() => {
+										if (todayLog == undefined) return;
+
+										if (todayLog.sleepTime == 0) return;
+
+										saveTodayLog({
+											...todayLog,
+											sleepTime: todayLog.sleepTime-1
+										});
+									}}>-</div>
+									<input style={{
+										width: "min-content",
+										border: "none",
+										padding: 0,
+										boxShadow: "none",
+										backgroundColor: "var(--background-primary)",
+										textAlign: "center"
+									}} type="number" name="sleeptime" id="sleeptime" min={0} step={0.5} max={24}
+									       value={todayLog.sleepTime} onChange={(e) => handleChange(e, "sleepTime")}/>
+									<div onClick={() => {
+										if (todayLog == undefined) return;
+
+										if (todayLog.sleepTime == 24) return;
+
+										saveTodayLog({
+											...todayLog,
+											sleepTime: todayLog.sleepTime+1
+										});
+									}}>+</div>
+								</div>
 							</div>
 						</div>
 					</div>

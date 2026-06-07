@@ -24,7 +24,7 @@ interface Props {
 
 function TrackingProvider({children, plugin, saveLogs}: Props) {
 	const [logs, setLogs] = useState<Logs>(plugin.settings.logs);
-	const [todayDate] = useState(() => new Date().toISOString().split("T")[0]);
+	const [todayDate] = useState(new Date().toLocaleDateString("fr-CA"));
 	const saveTimeoutRef = useRef<number | null>(null);
 
 	let todayLog = undefined

@@ -4,6 +4,7 @@ import globals from 'globals';
 import { globalIgnores } from 'eslint/config';
 
 export default tseslint.config(
+	tseslint.configs.recommended,
 	globalIgnores([
 		'node_modules',
 		'dist',
@@ -25,7 +26,6 @@ export default tseslint.config(
 					allowDefaultProject: ['eslint.config.mts', 'manifest.json'],
 				},
 				tsconfigRootDir: import.meta.dirname,
-				extraFileExtensions: ['.json', '.tsx'],
 			},
 		},
 	},
