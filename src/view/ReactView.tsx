@@ -1,5 +1,6 @@
 import DailyRecap from "./components/DailyRecap";
 import Stats from "./components/Stats";
+import MonthRecap from "./components/MonthRecap";
 
 export function ReactView(){
 	return (
@@ -17,9 +18,11 @@ export function ReactView(){
 			<DailyRecap></DailyRecap>
 			<div style={{
 				display: "flex",
+				flexDirection: "column",
 				gap: "0.5rem"
 			}}>
 				<Stats></Stats>
+				<MonthRecap></MonthRecap>
 			</div>
 		</div>
 	);

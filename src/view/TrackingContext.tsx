@@ -8,10 +8,12 @@ import {DailyLog, Logs} from "../types";
 interface TrackingContextType {
 	plugin: DailyTracker,
 	saveLogs: (newLogs : Logs) => void,
-	todayLog: DailyLog | undefined,
+	selectedLog: DailyLog | undefined,
+	selectedDate: string,
 	logs: Logs,
 	setLogs: Dispatch<SetStateAction<Logs>>,
-	saveTodayLog: (today: DailyLog) => void
+	saveTodayLog: (today: DailyLog) => void,
+	setActiveLog: (date: string) => void
 }
 
 const TrackingContext = createContext<TrackingContextType | undefined>(undefined);
@@ -25,13 +27,10 @@ interface Props {
 function TrackingProvider({children, plugin, saveLogs}: Props) {
 	const [logs, setLogs] = useState<Logs>(plugin.settings.logs);
 	const [todayDate] = useState(new Date().toLocaleDateString("fr-CA"));
+	const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString("fr-CA"));
 	const saveTimeoutRef = useRef<number | null>(null);
 
-	let todayLog = undefined
-
-	if(todayDate != undefined){
-		todayLog = logs[todayDate]
-	}
+	const selectedLog = logs[selectedDate];
 
 	useEffect(() => {
 		if(todayDate == undefined) return;
@@ -51,6 +50,18 @@ function TrackingProvider({children, plugin, saveLogs}: Props) {
 		setLogs((prev) => ({...prev, [today.date]: { ...today }}));
 	};
 
+	const setActiveLog = (date: string) => {
+		if (!logs[date]) {
+			const hab : Record<string, boolean> = {};
+			for(const h of plugin.settings.habits){
+				hab[h] = false;
+			}
+			const newLog = {habits: hab, sleepTime: 0, summary: "", workTime: 0, date: date};
+			setLogs(prev => ({...prev, [date]: newLog}));
+		}
+		setSelectedDate(date);
+	}
+
 	useEffect(() => {
 		if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
 		
@@ -66,10 +77,12 @@ function TrackingProvider({children, plugin, saveLogs}: Props) {
 	const value = {
 		plugin,
 		saveLogs,
-		todayLog,
+		selectedLog,
+		selectedDate,
 		logs,
 		setLogs,
-		saveTodayLog
+		saveTodayLog,
+		setActiveLog
 	};
 
 	return (

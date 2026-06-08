@@ -2,7 +2,7 @@ import {useTracking} from "../TrackingContext";
 import {useEffect, useState} from "react";
 
 function Stats() {
-	const { logs, todayLog } = useTracking();
+	const { logs, selectedLog } = useTracking();
 	const [averageSleep, setAverageSleep] = useState(0);
 	const [averageWork, setAverageWork] = useState(0);
 
@@ -25,7 +25,7 @@ function Stats() {
 			setAverageWork(Math.round((workSum/workNum)*100)/100);
 		}
 		retrieveAverages();
-	}, [todayLog?.workTime, todayLog?.sleepTime]);
+	}, [selectedLog?.workTime, selectedLog?.sleepTime]);
 
 	return (
 		<div style={{
@@ -39,7 +39,7 @@ function Stats() {
 				textAlign: "center",
 				padding: "1rem",
 				margin: "0"
-			}}>Statistics (30j)</h2>
+			}}>Statistics <span style={{ fontSize: "10px" }}>30j</span></h2>
 			<div style={{
 				display: "flex",
 				justifyContent: "space-around"

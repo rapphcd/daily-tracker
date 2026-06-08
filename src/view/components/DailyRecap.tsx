@@ -2,10 +2,11 @@ import {ChangeEvent} from "react";
 import {useTracking} from "../TrackingContext";
 
 function DailyRecap() {
-	const {saveTodayLog, todayLog} = useTracking();
+	const {saveTodayLog, selectedLog} = useTracking();
+	
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>, type: "workTime" | "sleepTime") => {
-		if (todayLog == undefined) return;
+		if (selectedLog == undefined) return;
 		let valeur = e.target.value;
 		if (valeur === '') {
 			e.target.value = "";
@@ -23,7 +24,7 @@ function DailyRecap() {
 		}
 
 		saveTodayLog({
-			...todayLog,
+			...selectedLog,
 			[type]: num
 		});
 	}
@@ -36,18 +37,18 @@ function DailyRecap() {
 			padding: "0 1rem 1.5rem 1rem"
 		}}>
 			{
-				todayLog != undefined && (
-					<div>
+				selectedLog != undefined && (
+					<div key={selectedLog.date}>
 						<h2 style={{
 							textAlign: "center",
 							padding: "1rem",
 							margin: "0"
-						}}>{new Date().toDateString()}</h2>
+						}}>{new Date(selectedLog.date).toDateString()}</h2>
 						<div>
 							<h3 style={{
 								marginBottom: "8px"
 							}}>Summary</h3>
-							<textarea name="summary" id="summary" rows={4} maxLength={400} defaultValue={todayLog.summary}
+							<textarea name="summary" id="summary" rows={4} maxLength={400} defaultValue={selectedLog.summary}
 							          style={{
 										  width: "100%",
 										  height: "fit-content",
@@ -57,7 +58,7 @@ function DailyRecap() {
 										  boxShadow: "none"
 									  }} onChange={(e) => {
 								saveTodayLog({
-									...todayLog,
+									...selectedLog,
 									summary: e.target.value
 								});
 							}}></textarea>
@@ -67,25 +68,25 @@ function DailyRecap() {
 								marginBottom: "8px"
 							}}>Habits</h3>
 							{
-								Object.keys(todayLog.habits).length > 0 && (
+								Object.keys(selectedLog.habits).length > 0 && (
 									<div style={{
 										display: "inline-grid",
 										gridAutoFlow: "column",
 										gap: "1rem",
-										columnCount: Object.keys(todayLog.habits).length
+										columnCount: Object.keys(selectedLog.habits).length
 									}}>
 										{
-											Object.keys(todayLog.habits).map((habit) => (
+											Object.keys(selectedLog.habits).map((habit) => (
 												<div key={habit} style={{
 													display: "flex",
 													alignItems: "center"
 												}}>
 													<input id={habit} name={habit} type={"checkbox"}
-													       defaultChecked={todayLog.habits[habit]} onChange={(e) => {
+													       defaultChecked={selectedLog.habits[habit]} onChange={(e) => {
 														saveTodayLog({
-															...todayLog,
+															...selectedLog,
 															habits: {
-																...todayLog.habits,
+																...selectedLog.habits,
 																[habit]: e.target.checked
 															}
 														});
@@ -117,16 +118,16 @@ function DailyRecap() {
 									justifyContent: "space-around",
 									alignItems: "center"
 								}}>
-									<div onClick={() => {
-										if (todayLog == undefined) return;
+									<button onClick={() => {
+										if (selectedLog == undefined) return;
 
-										if (todayLog.workTime == 0) return;
+										if (selectedLog.workTime == 0) return;
 
 										saveTodayLog({
-											...todayLog,
-											workTime: todayLog.workTime-1
+											...selectedLog,
+											workTime: selectedLog.workTime-1
 										});
-									}}>-</div>
+									}}>-</button>
 									<input style={{
 										width: "min-content",
 										border: "none",
@@ -135,17 +136,17 @@ function DailyRecap() {
 										backgroundColor: "var(--background-primary)",
 										textAlign: "center"
 									}} type="number" name="worktime" id="worktime" min={0} step={0.5} max={24}
-									       value={todayLog.workTime} onChange={(e) => handleChange(e, "workTime")}/>
-									<div onClick={() => {
-										if (todayLog == undefined) return;
+									       value={selectedLog.workTime} onChange={(e) => handleChange(e, "workTime")}/>
+									<button onClick={() => {
+										if (selectedLog == undefined) return;
 
-										if (todayLog.workTime == 24) return;
+										if (selectedLog.workTime == 24) return;
 
 										saveTodayLog({
-											...todayLog,
-											workTime: todayLog.workTime+1
+											...selectedLog,
+											workTime: selectedLog.workTime+1
 										});
-									}}>+</div>
+									}}>+</button>
 								</div>
 							</div>
 							<div style={{
@@ -163,16 +164,16 @@ function DailyRecap() {
 									justifyContent: "space-around",
 									alignItems: "center"
 								}}>
-									<div onClick={() => {
-										if (todayLog == undefined) return;
+									<button onClick={() => {
+										if (selectedLog == undefined) return;
 
-										if (todayLog.sleepTime == 0) return;
+										if (selectedLog.sleepTime == 0) return;
 
 										saveTodayLog({
-											...todayLog,
-											sleepTime: todayLog.sleepTime-1
+											...selectedLog,
+											sleepTime: selectedLog.sleepTime-1
 										});
-									}}>-</div>
+									}}>-</button>
 									<input style={{
 										width: "min-content",
 										border: "none",
@@ -181,17 +182,17 @@ function DailyRecap() {
 										backgroundColor: "var(--background-primary)",
 										textAlign: "center"
 									}} type="number" name="sleeptime" id="sleeptime" min={0} step={0.5} max={24}
-									       value={todayLog.sleepTime} onChange={(e) => handleChange(e, "sleepTime")}/>
-									<div onClick={() => {
-										if (todayLog == undefined) return;
+									       value={selectedLog.sleepTime} onChange={(e) => handleChange(e, "sleepTime")}/>
+									<button onClick={() => {
+										if (selectedLog == undefined) return;
 
-										if (todayLog.sleepTime == 24) return;
+										if (selectedLog.sleepTime == 24) return;
 
 										saveTodayLog({
-											...todayLog,
-											sleepTime: todayLog.sleepTime+1
+											...selectedLog,
+											sleepTime: selectedLog.sleepTime+1
 										});
-									}}>+</div>
+									}}>+</button>
 								</div>
 							</div>
 						</div>
