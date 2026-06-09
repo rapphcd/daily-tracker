@@ -13,7 +13,7 @@ interface TrackingContextType {
 	logs: Logs,
 	setLogs: Dispatch<SetStateAction<Logs>>,
 	saveTodayLog: (today: DailyLog) => void,
-	setActiveLog: (date: string) => void
+	setActiveLog: (date: string, creat: boolean) => void
 }
 
 const TrackingContext = createContext<TrackingContextType | undefined>(undefined);
@@ -50,8 +50,10 @@ function TrackingProvider({children, plugin, saveLogs}: Props) {
 		setLogs((prev) => ({...prev, [today.date]: { ...today }}));
 	};
 
-	const setActiveLog = (date: string) => {
+	const setActiveLog = (date: string, create: boolean) => {
 		if (!logs[date]) {
+			if(!create) return;
+			if(new Date(date) > new Date(todayDate)) return;
 			const hab : Record<string, boolean> = {};
 			for(const h of plugin.settings.habits){
 				hab[h] = false;

@@ -102,7 +102,8 @@ function DailyRecap() {
 						</div>
 						<div style={{
 							display: "flex",
-							justifyContent: "space-between"
+							justifyContent: "space-between",
+							flexWrap: "wrap"
 						}}>
 							<div style={{
 								display: "flex",
@@ -111,7 +112,8 @@ function DailyRecap() {
 								alignItems: "center"
 							}}>
 								<h3 style={{
-									marginBottom: "0"
+									marginBottom: "0",
+									textWrap: "nowrap"
 								}}>Work time</h3>
 								<div style={{
 									display: "flex",
@@ -153,11 +155,12 @@ function DailyRecap() {
 								width: "50%",
 								display: "flex",
 								flexDirection: "column",
-								justifyContent: "center",
-								alignItems: "center"
+								justifyContent: "start",
+								alignItems: "start"
 							}}>
 								<h3 style={{
-									marginBottom: "0"
+									marginBottom: "0",
+									textWrap: "nowrap"
 								}}>Sleep time</h3>
 								<div style={{
 									display: "flex",

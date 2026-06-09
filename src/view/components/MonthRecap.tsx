@@ -57,33 +57,39 @@ function MonthRecap(){
 			width: "100%",
 			padding: "0 1rem 1.5rem 1rem"
 		}}>
-			<div style={{ width: '100%'}}>
-				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+			<div style={{ width: '100%', display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: "100%" }}>
 					<button onClick={() => changeMonth(-1)}> {"<"} </button>
 					<h5>{monthsNames[month]} {year}</h5>
 					<button onClick={() => changeMonth(1)}> {">"} </button>
 				</div>
 
-				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center', fontWeight: 'bold' }}>
+				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center', fontWeight: 'bold', width: "100%" }}>
 					{daysNames.map((j) => (
-						<div key={j} style={{ padding: '1.5px' }}>{j}</div>
+						<div key={j} style={{ padding: '1.5px', textWrap: "nowrap", textOverflow: "ellipsis" }}>{j}</div>
 					))}
 				</div>
 				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center' }}>
 					{days.map((jour, index) => (
 						<div
-							key={index}
+							key={`${index}-${month}-${year}`}
 							style={{
-								padding: '3px',
-								borderRadius: "var(--radius-s)",
+								padding: '0.4rem 0.75rem ',
+								width: "min-content",
+								borderRadius: "100%",
 								backgroundColor: jour ? (isSelected(jour) ? "var(--interactive-accent)" : (isToday(jour) ? "red" : "var(--background-primary)")) : 'var(--background-primary)',
-								color: `${hasNote(jour) != false ? (isSelected(jour) ? "white" : "var(text-normal)")  : "var(--text-muted)"}`,
-								cursor: jour ? 'pointer' : 'default'
+								color: `${hasNote(jour) != false ? (isSelected(jour) ? "" : "var(text-normal)")  : "var(--text-faint)"}`,
+								cursor: jour ? 'pointer' : 'default',
 							}}
 							onClick={() => {
 								if(jour == null) return;
 								const str = `${year}-${month+1 < 10 ? "0" : ""}${month+1}-${jour < 10 ? "0" : ""}${jour}`;
-								setActiveLog(str);
+								setActiveLog(str, false);
+							}}
+							onDoubleClick={() => {
+								if(jour == null) return;
+								const str = `${year}-${month+1 < 10 ? "0" : ""}${month+1}-${jour < 10 ? "0" : ""}${jour}`;
+								setActiveLog(str, true);
 							}}
 						>
 							{jour}
