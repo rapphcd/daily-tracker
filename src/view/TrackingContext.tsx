@@ -4,6 +4,7 @@ import {
 } from "react";
 import DailyTracker from "../main";
 import {DailyLog, Logs} from "../types";
+import {App} from "obsidian";
 
 interface TrackingContextType {
 	plugin: DailyTracker,
@@ -13,7 +14,8 @@ interface TrackingContextType {
 	logs: Logs,
 	setLogs: Dispatch<SetStateAction<Logs>>,
 	saveTodayLog: (today: DailyLog) => void,
-	setActiveLog: (date: string, creat: boolean) => void
+	setActiveLog: (date: string, creat: boolean) => void,
+	app: App
 }
 
 const TrackingContext = createContext<TrackingContextType | undefined>(undefined);
@@ -22,9 +24,10 @@ interface Props {
 	children: ReactNode,
 	plugin: DailyTracker,
 	saveLogs: (newLogs : Logs) => Promise<void>,
+	app: App
 }
 
-function TrackingProvider({children, plugin, saveLogs}: Props) {
+function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 	const [logs, setLogs] = useState<Logs>(plugin.settings.logs);
 	const [todayDate] = useState(new Date().toLocaleDateString("fr-CA"));
 	const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString("fr-CA"));
@@ -60,6 +63,16 @@ function TrackingProvider({children, plugin, saveLogs}: Props) {
 			}
 			const newLog = {habits: hab, sleepTime: 0, summary: "", workTime: 0, date: date};
 			setLogs(prev => ({...prev, [date]: newLog}));
+		} else if(new Date(date) >= new Date(todayDate) && JSON.parse(JSON.stringify(Object.keys(logs[date].habits))) != JSON.parse(JSON.stringify(plugin.settings.habits))){
+			console.log(Object.keys(logs[date].habits), plugin.settings.habits, JSON.parse(JSON.stringify(Object.keys(logs[date].habits))) != JSON.parse(JSON.stringify(plugin.settings.habits)))
+			const hab : Record<string, boolean> = {};
+			for(const h of plugin.settings.habits){
+				hab[h] = false;
+			}
+			const newLog = logs[date];
+			if(newLog != undefined){
+				setLogs(prev => ({...prev, [date]: {...newLog, habits: hab}}));
+			}
 		}
 		setSelectedDate(date);
 	}
@@ -84,7 +97,8 @@ function TrackingProvider({children, plugin, saveLogs}: Props) {
 		logs,
 		setLogs,
 		saveTodayLog,
-		setActiveLog
+		setActiveLog,
+		app
 	};
 
 	return (

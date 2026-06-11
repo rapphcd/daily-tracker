@@ -1,8 +1,10 @@
 import {useTracking} from "../TrackingContext";
 import {useEffect, useState} from "react";
+import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import { RechartsDevtools } from '@recharts/devtools';
 
 function Stats() {
-	const { logs, selectedLog } = useTracking();
+	const { logs, selectedLog, setActiveLog } = useTracking();
 	const [averageSleep, setAverageSleep] = useState(0);
 	const [averageWork, setAverageWork] = useState(0);
 
@@ -32,6 +34,7 @@ function Stats() {
 			backgroundColor: "var(--background-primary)",
 			borderRadius: "var(--radius-l)",
 			height: "max-content",
+			minHeight: "100px",
 			width: "100%",
 			padding: "0 1rem 1.5rem 1rem"
 		}}>
@@ -39,29 +42,41 @@ function Stats() {
 				textAlign: "center",
 				padding: "1rem",
 				margin: "0"
-			}}>Statistics <span style={{ fontSize: "10px" }}>30j</span></h2>
+			}}>Statistics</h2>
 			<div style={{
 				display: "flex",
 				justifyContent: "space-around"
 			}}>
-				<div>
-					<p style={{
-						margin: "0"
-					}}>{averageWork}<span style={{ fontSize: "10px" }}>h avg</span></p>
-					<p style={{
-						fontSize: "11.5px",
-						margin: "0"
-					}}>Work time</p>
-				</div>
-				<div>
-					<p style={{
-						margin: "0"
-					}}>{averageSleep}<span style={{ fontSize: "10px" }}>h avg</span></p>
-					<p style={{
-						fontSize: "11.5px",
-						margin: "0"
-					}}>Sleep time</p>
-				</div>
+				<BarChart
+					style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
+					responsive
+					data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
+						const log = logs[k];
+						if(log != undefined){
+							return {name: log.date, sleeptime: log.sleepTime, worktime: log.workTime}
+						}
+						return undefined
+					})}
+					margin={{
+						top: 5,
+						right: 0,
+						left: 0,
+						bottom: 5,
+					}}
+				>
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis dataKey="name" />
+					<YAxis width="auto" />
+					<Tooltip />
+					<Legend />
+					<Bar dataKey="sleeptime" fill="#8884d8" activeBar={{ fill: '#8884d8', stroke: 'black' }} onClick={(b) => {
+						if(b.name != undefined) setActiveLog(b.name, false);
+					}} radius={[5, 5, 0, 0]} />
+					<Bar dataKey="worktime" fill="#82ca9d" activeBar={{ fill: '#82ca9d', stroke: 'black' }} onClick={(b) => {
+						if(b.name != undefined) setActiveLog(b.name, false);
+					}} radius={[5, 5, 0, 0]} />
+					<RechartsDevtools />
+				</BarChart>
 			</div>
 		</div>
 	)

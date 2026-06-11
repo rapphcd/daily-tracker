@@ -30,7 +30,9 @@
 		"typescript-eslint": "^8.59.1"
 	},
 	"dependencies": {
+		"@recharts/devtools": "^0.0.14",
 		"react": "^19.2.7",
-		"react-dom": "^19.2.7"
+		"react-dom": "^19.2.7",
+		"recharts": "^3.8.1"
 	}
 }

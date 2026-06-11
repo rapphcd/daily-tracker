@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf } from "obsidian";
+import {addIcon, IconName, IconValue, ItemView, WorkspaceLeaf} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
 import ReactView from './ReactView';
 import {StrictMode} from "react";
@@ -25,6 +25,10 @@ export default class TrackingView extends ItemView {
 		return "Tracking view";
 	}
 
+	getIcon(): IconName {
+		return "calendar-1"
+	}
+
 	async handleSave(newLogs: Logs){
 		this.plugin.settings.logs = newLogs;
 		await this.plugin.saveSettings();
@@ -34,7 +38,7 @@ export default class TrackingView extends ItemView {
 		this.root = createRoot(this.contentEl);
 		this.root.render(
 			<StrictMode>
-				<TrackingContext plugin={this.plugin} saveLogs={(newLogs) => this.handleSave(newLogs)}>
+				<TrackingContext plugin={this.plugin} app={this.app} saveLogs={(newLogs) => this.handleSave(newLogs)}>
 					<ReactView />
 				</TrackingContext>
 			</StrictMode>

@@ -64,22 +64,23 @@ function MonthRecap(){
 					<button onClick={() => changeMonth(1)}> {">"} </button>
 				</div>
 
-				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center', fontWeight: 'bold', width: "100%" }}>
+
+				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center', gap: "2px" }}>
 					{daysNames.map((j) => (
-						<div key={j} style={{ padding: '1.5px', textWrap: "nowrap", textOverflow: "ellipsis" }}>{j}</div>
+						<div key={j} style={{ padding: '0rem', textWrap: "nowrap", textOverflow: "ellipsis", fontWeight: "bold" }}>{j}</div>
 					))}
-				</div>
-				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center' }}>
 					{days.map((jour, index) => (
 						<div
 							key={`${index}-${month}-${year}`}
 							style={{
-								padding: '0.4rem 0.75rem ',
-								width: "min-content",
+								padding: '0.4rem',
+								width: "auto",
 								borderRadius: "100%",
-								backgroundColor: jour ? (isSelected(jour) ? "var(--interactive-accent)" : (isToday(jour) ? "red" : "var(--background-primary)")) : 'var(--background-primary)',
-								color: `${hasNote(jour) != false ? (isSelected(jour) ? "" : "var(text-normal)")  : "var(--text-faint)"}`,
+								backgroundColor: jour && isToday(jour) && !isSelected(jour) ? "var(--interactive-accent)" : "var(--background-primary)",
+								color: `${hasNote(jour) != false ? (isSelected(jour) ? "" : "var(text-normal)") : "gray"}`,
+								textDecoration: hasNote(jour) ? "underline" : "",
 								cursor: jour ? 'pointer' : 'default',
+								border: `2px solid ${isSelected(jour) ? "var(--interactive-accent)" : "transparent"}`
 							}}
 							onClick={() => {
 								if(jour == null) return;

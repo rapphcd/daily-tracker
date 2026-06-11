@@ -1,12 +1,11 @@
 import {
-	Plugin, WorkspaceLeaf,
+	Plugin, SettingTab, WorkspaceLeaf,
 } from 'obsidian';
 import {
 	DEFAULT_SETTINGS,
-	DailyTrackerSettings
+	DailyTrackerSettings, SettingsTab
 } from './settings';
 import TrackingView, {TRACKING_VIEW} from "./view/view";
-
 
 export default class DailyTracker extends Plugin {
 	settings!: DailyTrackerSettings;
@@ -19,9 +18,11 @@ export default class DailyTracker extends Plugin {
 			(leaf) => new TrackingView(leaf, this)
 		);
 
-		this.addRibbonIcon('dice', 'Sample', async (_evt: MouseEvent) => {
+		this.addRibbonIcon('calendar-1', 'Daily tracker', async (_evt: MouseEvent) => {
 			await this.activateView();
 		});
+
+		this.addSettingTab(new SettingsTab(this.app, this));
 	}
 
 	onunload() {}
@@ -41,7 +42,7 @@ export default class DailyTracker extends Plugin {
 	async activateView() {
 		const { workspace } = this.app;
 
-		let leaf: WorkspaceLeaf | null = null;
+		let leaf: WorkspaceLeaf | null;
 		const leaves = workspace.getLeavesOfType(TRACKING_VIEW);
 
 		if(leaves.length > 0 && leaves[0] != undefined) {
