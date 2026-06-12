@@ -1,4 +1,4 @@
-import {addIcon, IconName, IconValue, ItemView, WorkspaceLeaf} from "obsidian";
+import {IconName, ItemView, WorkspaceLeaf} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
 import ReactView from './ReactView';
 import {StrictMode} from "react";
@@ -6,7 +6,7 @@ import DailyTracker from "../main";
 import {Logs} from "../types";
 import TrackingContext from "./TrackingContext";
 
-export const TRACKING_VIEW = "tracking-view";
+export const TRACKING_VIEW = "tracking-views";
 
 export default class TrackingView extends ItemView {
 	plugin: DailyTracker;
@@ -22,7 +22,7 @@ export default class TrackingView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return "Tracking view";
+		return "Tracking views";
 	}
 
 	getIcon(): IconName {

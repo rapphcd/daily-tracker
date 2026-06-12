@@ -34,7 +34,7 @@ const context = await esbuild.context({
 		'@codemirror/lint',
 		'@codemirror/search',
 		'@codemirror/state',
-		'@codemirror/view',
+		'@codemirror/views',
 		'@lezer/common',
 		'@lezer/highlight',
 		'@lezer/lr',

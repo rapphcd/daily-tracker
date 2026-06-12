@@ -23,12 +23,13 @@ export class SettingsTab extends PluginSettingTab {
 	display(): void {
 		let { containerEl } = this;
 
-		containerEl.empty();
-
 		let newHab = ""
 
-		const sett = new Setting(containerEl)
+		containerEl.empty();
+
+		new Setting(containerEl)
 			.setName('New habit')
+			.setDesc("")
 			.addText((text) =>
 				text
 					.setPlaceholder('')
@@ -48,15 +49,19 @@ export class SettingsTab extends PluginSettingTab {
 						this.display();
 					}));
 
+		new Setting(containerEl).setName('Habits').setHeading()
+
 		for(const hab of this.plugin.settings.habits){
-			sett.addButton((button) =>
-				button
-					.setButtonText(`Delete ${hab}`)
-					.onClick(async () => {
-						this.plugin.settings.habits = this.plugin.settings.habits.filter((h) => h != hab)
-						await this.plugin.saveSettings();
-						this.display();
-					}));
+			new Setting(containerEl)
+				.setName(hab)
+				.addButton((button) =>
+					button
+						.setIcon("trash")
+						.onClick(async () => {
+							this.plugin.settings.habits = this.plugin.settings.habits.filter((h) => h != hab)
+							await this.plugin.saveSettings();
+							this.display();
+						}));
 		}
 	}
 }

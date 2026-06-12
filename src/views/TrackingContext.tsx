@@ -63,8 +63,7 @@ function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 			}
 			const newLog = {habits: hab, sleepTime: 0, summary: "", workTime: 0, date: date};
 			setLogs(prev => ({...prev, [date]: newLog}));
-		} else if(new Date(date) >= new Date(todayDate) && JSON.parse(JSON.stringify(Object.keys(logs[date].habits))) != JSON.parse(JSON.stringify(plugin.settings.habits))){
-			console.log(Object.keys(logs[date].habits), plugin.settings.habits, JSON.parse(JSON.stringify(Object.keys(logs[date].habits))) != JSON.parse(JSON.stringify(plugin.settings.habits)))
+		} else if(new Date(date) >= new Date(todayDate) && JSON.stringify(Object.keys(logs[date].habits)) != JSON.stringify(plugin.settings.habits)){
 			const hab : Record<string, boolean> = {};
 			for(const h of plugin.settings.habits){
 				hab[h] = false;

@@ -1,11 +1,13 @@
 import {
-	Plugin, SettingTab, WorkspaceLeaf,
+	MarkdownView,
+	Plugin, WorkspaceLeaf,
 } from 'obsidian';
 import {
 	DEFAULT_SETTINGS,
 	DailyTrackerSettings, SettingsTab
 } from './settings';
-import TrackingView, {TRACKING_VIEW} from "./view/view";
+import TrackingView, {TRACKING_VIEW} from "./views/view";
+import CheckModal from "./views/modal";
 
 export default class DailyTracker extends Plugin {
 	settings!: DailyTrackerSettings;
@@ -20,6 +22,21 @@ export default class DailyTracker extends Plugin {
 
 		this.addRibbonIcon('calendar-1', 'Daily tracker', async (_evt: MouseEvent) => {
 			await this.activateView();
+		});
+
+		this.addCommand({
+			id: 'complete-habit',
+			name: 'Complete habit',
+			checkCallback: (checking: boolean) => {
+				const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
+				if (markdownView) {
+					if (!checking) {
+						new CheckModal(this.app, this).open();
+					}
+					return true;
+				}
+				return false;
+			},
 		});
 
 		this.addSettingTab(new SettingsTab(this.app, this));

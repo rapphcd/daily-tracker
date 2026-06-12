@@ -1,6 +1,6 @@
-import DailyRecap from "./components/DailyRecap";
-import Stats from "./components/Stats";
-import MonthRecap from "./components/MonthRecap";
+import DailyRecap from "./view/DailyRecap";
+import Stats from "./view/Stats";
+import MonthRecap from "./view/MonthRecap";
 
 export function ReactView(){
 	return (
