@@ -1,5 +1,4 @@
 import {
-	MarkdownView,
 	Plugin, WorkspaceLeaf,
 } from 'obsidian';
 import {
@@ -7,7 +6,7 @@ import {
 	DailyTrackerSettings, SettingsTab
 } from './settings';
 import TrackingView, {TRACKING_VIEW} from "./views/view";
-import CheckModal from "./views/modal";
+import StatsModal from "./views/modal";
 
 export default class DailyTracker extends Plugin {
 	settings!: DailyTrackerSettings;
@@ -25,17 +24,10 @@ export default class DailyTracker extends Plugin {
 		});
 
 		this.addCommand({
-			id: 'complete-habit',
-			name: 'Complete habit',
-			checkCallback: (checking: boolean) => {
-				const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					if (!checking) {
-						new CheckModal(this.app, this).open();
-					}
-					return true;
-				}
-				return false;
+			id: 'show-statistics',
+			name: 'Show statistics',
+			callback: () => {
+				new StatsModal(this.app, this).open();
 			},
 		});
 

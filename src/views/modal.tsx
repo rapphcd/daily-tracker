@@ -4,9 +4,9 @@ import TrackingContext from "./TrackingContext";
 import {App, Modal} from "obsidian";
 import DailyTracker from "../main";
 import {Logs} from "../types";
-import ModalHabits from "./modal/ModalHabits";
+import ModalStats from "./modal/ModalStats";
 
-export default class CheckModal extends Modal {
+export default class StatsModal extends Modal {
 	plugin: DailyTracker;
 	root: Root | null = null;
 
@@ -21,15 +21,14 @@ export default class CheckModal extends Modal {
 		this.root.render(
 			<StrictMode>
 				<TrackingContext plugin={this.plugin} app={this.app} saveLogs={(newLogs) => this.handleSave(newLogs)}>
-					<ModalHabits />
+					<ModalStats />
 				</TrackingContext>
 			</StrictMode>
 		);
 	}
 
 	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
+		this.root?.unmount();
 	}
 
 	async handleSave(newLogs: Logs){

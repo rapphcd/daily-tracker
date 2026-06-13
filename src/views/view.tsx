@@ -1,6 +1,6 @@
 import {IconName, ItemView, WorkspaceLeaf} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
-import ReactView from './ReactView';
+import ReactView from './view/ReactView';
 import {StrictMode} from "react";
 import DailyTracker from "../main";
 import {Logs} from "../types";
@@ -22,7 +22,7 @@ export default class TrackingView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return "Tracking views";
+		return "Tracking view";
 	}
 
 	getIcon(): IconName {

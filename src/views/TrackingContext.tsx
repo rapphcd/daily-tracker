@@ -63,18 +63,32 @@ function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 			}
 			const newLog = {habits: hab, sleepTime: 0, summary: "", workTime: 0, date: date};
 			setLogs(prev => ({...prev, [date]: newLog}));
-		} else if(new Date(date) >= new Date(todayDate) && JSON.stringify(Object.keys(logs[date].habits)) != JSON.stringify(plugin.settings.habits)){
-			const hab : Record<string, boolean> = {};
-			for(const h of plugin.settings.habits){
-				hab[h] = false;
-			}
-			const newLog = logs[date];
-			if(newLog != undefined){
-				setLogs(prev => ({...prev, [date]: {...newLog, habits: hab}}));
-			}
 		}
 		setSelectedDate(date);
 	}
+
+	useEffect(() => {
+		const handleHabitsChange = () => {
+			setLogs(prev => {
+				const newLogs = { ...prev };
+				const today = new Date().toLocaleDateString("fr-CA");
+				if (newLogs[today]) {
+					const habits = newLogs[today].habits;
+					const newHabits: Record<string, boolean> = {};
+					for (const h of plugin.settings.habits) {
+						newHabits[h] = habits[h] ?? false;
+					}
+					newLogs[today] = { ...newLogs[today], habits: newHabits };
+				}
+				return newLogs;
+			});
+		};
+
+		const eventRef = app.workspace.on("daily-tracker:habits-updated", handleHabitsChange);
+		return () => {
+			app.workspace.offref(eventRef);
+		};
+	}, [app.workspace, plugin.settings.habits]);
 
 	useEffect(() => {
 		if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
@@ -87,6 +101,39 @@ function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 			if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
 		};
 	}, [logs, saveLogs]);
+
+	useEffect(() => {
+		let dayChangeTimeout : number;
+		const setupDayChange = () => {
+			const now = new Date();
+			const midnight = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				now.getDate() +1,
+				0,
+				0,
+				0,
+				0
+			);
+
+			const msToSwitch = midnight.getTime() - now.getTime();
+
+			dayChangeTimeout = window.setTimeout(() => {
+				handleDayChange();
+				setupDayChange();
+			}, msToSwitch);
+		};
+		const handleDayChange = () => {
+			const today = new Date().toLocaleDateString("fr-CA");
+			setSelectedDate(today);
+		};
+
+		setupDayChange();
+
+		return () => {
+			window.clearTimeout(dayChangeTimeout);
+		};
+	}, []);
 
 	const value = {
 		plugin,

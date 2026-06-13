@@ -8,7 +8,7 @@ export interface DailyTrackerSettings {
 }
 
 export const DEFAULT_SETTINGS: DailyTrackerSettings = {
-	habits: ["Lire", "Sport"],
+	habits: ["Lire", "Sport", "Détente"],
 	logs: {}
 };
 
@@ -46,6 +46,7 @@ export class SettingsTab extends PluginSettingTab {
 						if(newHab == "" ) return;
 						this.plugin.settings.habits.push(newHab);
 						await this.plugin.saveSettings();
+						this.plugin.app.workspace.trigger("daily-tracker:habits-updated");
 						this.display();
 					}));
 
@@ -60,6 +61,7 @@ export class SettingsTab extends PluginSettingTab {
 						.onClick(async () => {
 							this.plugin.settings.habits = this.plugin.settings.habits.filter((h) => h != hab)
 							await this.plugin.saveSettings();
+							this.plugin.app.workspace.trigger("daily-tracker:habits-updated");
 							this.display();
 						}));
 		}
