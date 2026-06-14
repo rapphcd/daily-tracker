@@ -16,14 +16,25 @@ import {useEffect, useState} from "react";
 
 function ModalStats() {
 	const { selectedLog, logs, setActiveLog} = useTracking();
+	const [avgSleep, setAvgSleep] = useState(0);
+	const [avgWork, setAvgWork] = useState(0);
 	const [data, setData] = useState<{habit: string, A: number, B: number}[]>([]);
 
 	useEffect(() => {
 		const retrieveStats = () => {
-			const prov : Record<string, {times: number, completed: number}> = {}
+			const prov : Record<string, {times: number, completed: number}> = {};
+			const sleep : { nb: number, hr: number} = { nb: 0, hr: 0};
+			const work : { nb: number, hr: number} = { nb: 0, hr: 0};
 			for(const key of Object.keys(logs).slice(-30)){
 				const log = logs[key];
 				if(log == undefined) continue;
+
+				sleep.nb += 1;
+				sleep.hr += log.sleepTime;
+
+				work.nb += 1;
+				work.hr += log.workTime;
+
 				for(const k of Object.keys(log.habits)){
 					const habit = log.habits[k];
 					if(habit == undefined) continue;
@@ -38,6 +49,8 @@ function ModalStats() {
 					prov[k] = regist;
 				}
 			}
+			setAvgSleep(Math.round(100*(sleep.hr/sleep.nb))/100)
+			setAvgWork(Math.round(100*(work.hr/work.nb))/100);
 			return prov;
 		}
 		const getFormattedStats = () => {
@@ -69,10 +82,8 @@ function ModalStats() {
 							margin: "0"
 						}}>Statistics</h2>
 						<div style={{
-							display: "flex",
-							flexDirection: "column",
-							justifyContent: "space-around",
-							alignItems: "center",
+							display: "grid",
+							gridTemplateColumns: "repeat(2, 1fr)",
 							gap: "50px"
 						}}>
 							<BarChart
@@ -131,6 +142,17 @@ function ModalStats() {
 									</div>
 								)
 							}
+							<div>
+								<h3  style={{
+									textAlign: "center",
+									padding: "0 1rem 1rem 1rem",
+									margin: "0"
+								}}>Averages</h3>
+								<div>
+									<p>{avgSleep}hr</p>
+									<p>{avgWork}hr</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				)
