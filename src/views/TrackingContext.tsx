@@ -29,14 +29,13 @@ interface Props {
 
 function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 	const [logs, setLogs] = useState<Logs>(plugin.settings.logs);
-	const [todayDate] = useState(new Date().toLocaleDateString("fr-CA"));
+	const [todayDate, setTodayDate] = useState(new Date().toLocaleDateString("fr-CA"));
 	const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString("fr-CA"));
 	const saveTimeoutRef = useRef<number | null>(null);
 
 	const selectedLog = logs[selectedDate];
 
 	useEffect(() => {
-		if(todayDate == undefined) return;
 		if (!logs[todayDate]) {
 			const hab : Record<string, boolean> = {};
 			for(const h of plugin.settings.habits){
@@ -125,6 +124,7 @@ function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 		};
 		const handleDayChange = () => {
 			const today = new Date().toLocaleDateString("fr-CA");
+			setTodayDate(today);
 			setSelectedDate(today);
 		};
 
