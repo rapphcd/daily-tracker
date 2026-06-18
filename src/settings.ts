@@ -50,20 +50,21 @@ export class SettingsTab extends PluginSettingTab {
 						this.display();
 					}));
 
-		new Setting(containerEl).setName('Habits').setHeading()
-
-		for(const hab of this.plugin.settings.habits){
-			new Setting(containerEl)
-				.setName(hab)
-				.addButton((button) =>
-					button
-						.setIcon("trash")
-						.onClick(async () => {
-							this.plugin.settings.habits = this.plugin.settings.habits.filter((h) => h != hab)
-							await this.plugin.saveSettings();
-							this.plugin.app.workspace.trigger("daily-tracker:habits-updated");
-							this.display();
-						}));
+		if(this.plugin.settings.habits.length > 0) {
+			new Setting(containerEl).setName('Habits').setHeading()
+			for (const hab of this.plugin.settings.habits) {
+				new Setting(containerEl)
+					.setName(hab)
+					.addButton((button) =>
+						button
+							.setIcon("trash")
+							.onClick(async () => {
+								this.plugin.settings.habits = this.plugin.settings.habits.filter((h) => h != hab)
+								await this.plugin.saveSettings();
+								this.plugin.app.workspace.trigger("daily-tracker:habits-updated");
+								this.display();
+							}));
+			}
 		}
 	}
 }

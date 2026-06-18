@@ -3,7 +3,7 @@ import {useTracking} from "../TrackingContext";
 
 function DailyRecap() {
 	const {saveTodayLog, selectedLog} = useTracking();
-	
+
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>, type: "workTime" | "sleepTime") => {
 		if (selectedLog == undefined) return;
@@ -48,14 +48,15 @@ function DailyRecap() {
 							<h3 style={{
 								marginBottom: "8px"
 							}}>Summary</h3>
-							<textarea name="summary" id="summary" rows={4} maxLength={400} defaultValue={selectedLog.summary}
+							<textarea name="summary" id="summary" rows={4} maxLength={400}
+							          defaultValue={selectedLog.summary}
 							          style={{
 										  width: "100%",
 										  height: "fit-content",
 										  resize: "none",
-										  borderColor: "lightgrey",
+										  border: "1px solid lightgrey",
 										  backgroundColor: "var(--background-primary)",
-										  boxShadow: "none"
+										  boxShadow: "none",
 									  }} onChange={(e) => {
 								saveTodayLog({
 									...selectedLog,
@@ -63,12 +64,12 @@ function DailyRecap() {
 								});
 							}}></textarea>
 						</div>
-						<div>
-							<h3 style={{
-								marginBottom: "8px"
-							}}>Habits</h3>
-							{
-								Object.keys(selectedLog.habits).length > 0 && (
+						{
+							Object.keys(selectedLog.habits).length > 0 && (
+								<div>
+									<h3 style={{
+										marginBottom: "8px"
+									}}>Habits</h3>
 									<div style={{
 										display: "inline-grid",
 										gridAutoFlow: "column",
@@ -97,9 +98,9 @@ function DailyRecap() {
 											))
 										}
 									</div>
-								)
-							}
-						</div>
+								</div>
+							)
+						}
 						<div style={{
 							display: "flex",
 							justifyContent: "space-between",
@@ -127,9 +128,10 @@ function DailyRecap() {
 
 										saveTodayLog({
 											...selectedLog,
-											workTime: selectedLog.workTime-1
+											workTime: selectedLog.workTime - 1
 										});
-									}}>-</button>
+									}}>-
+									</button>
 									<input style={{
 										width: "min-content",
 										border: "none",
@@ -146,9 +148,10 @@ function DailyRecap() {
 
 										saveTodayLog({
 											...selectedLog,
-											workTime: selectedLog.workTime+1
+											workTime: selectedLog.workTime + 1
 										});
-									}}>+</button>
+									}}>+
+									</button>
 								</div>
 							</div>
 							<div style={{
@@ -174,9 +177,10 @@ function DailyRecap() {
 
 										saveTodayLog({
 											...selectedLog,
-											sleepTime: selectedLog.sleepTime-1
+											sleepTime: selectedLog.sleepTime - 1
 										});
-									}}>-</button>
+									}}>-
+									</button>
 									<input style={{
 										width: "min-content",
 										border: "none",
@@ -193,9 +197,10 @@ function DailyRecap() {
 
 										saveTodayLog({
 											...selectedLog,
-											sleepTime: selectedLog.sleepTime+1
+											sleepTime: selectedLog.sleepTime + 1
 										});
-									}}>+</button>
+									}}>+
+									</button>
 								</div>
 							</div>
 						</div>
