@@ -3,8 +3,7 @@ import {
 	Bar,
 	BarChart,
 	CartesianGrid,
-	Legend,
-	PolarAngleAxis,
+	Legend, Pie, PieChart, PolarAngleAxis,
 	PolarGrid, PolarRadiusAxis, Radar,
 	RadarChart,
 	Tooltip,
@@ -14,11 +13,19 @@ import {
 import {RechartsDevtools} from "@recharts/devtools";
 import {useEffect, useState} from "react";
 
+const letters = ["A", "B", "C", "D", "E"]
+
 function ModalStats() {
 	const { selectedLog, logs, setActiveLog} = useTracking();
 	const [avgSleep, setAvgSleep] = useState(0);
 	const [avgWork, setAvgWork] = useState(0);
-	const [data, setData] = useState<{habit: string, A: number, B: number}[]>([]);
+	const [data, setData] = useState<{habit: string, A: number, B: number, letter: string}[]>([]);
+
+	function formatDuration(hoursFloat : number) {
+		const h = Math.floor(hoursFloat);
+		const m = Math.round((hoursFloat - h) * 60);
+		return `${h}h ${m}m`;
+	}
 
 	useEffect(() => {
 		const retrieveStats = () => {
@@ -55,15 +62,19 @@ function ModalStats() {
 		}
 		const getFormattedStats = () => {
 			const stats = retrieveStats();
-			const formatted : {habit: string, A: number, B: number}[] = []
+			const formatted : {habit: string, A: number, B: number, letter: string}[] = [];
+			let idx = 0;
 			for(const k of Object.keys(stats)){
 				const stat = stats[k];
+				const lett = letters[idx];
 				if(stat == undefined) continue;
 				formatted.push({
 					habit: k,
 					A: stat.times,
-					B: stat.completed
+					B: stat.completed,
+					letter: lett != undefined ? lett : "A"
 				});
+				idx+=1;
 			}
 			return formatted;
 		}
@@ -135,26 +146,37 @@ function ModalStats() {
 								borderRadius: "var(--radius-l)",
 								padding: "0.2rem",
 								width: '100%',
-								flex: "1"
+								flex: "1",
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center"
 							}}>
 								{
 									data.length >= 3 ? (
 										<RadarChart
-											style={{ width: '100%', height: "100%", aspectRatio: 1.618 }}
+											style={{ width: '100%', height: "100%", aspectRatio: 1.2 }}
 											responsive
-											outerRadius="80%"
+											outerRadius="70%"
 											data={data}
-											margin={{
-												top: 20,
-												left: 20,
-												right: 20,
-												bottom: 20,
-											}}
 										>
 											<PolarGrid />
-											<PolarAngleAxis dataKey="habit" />
+											<PolarAngleAxis dataKey="habit" tickFormatter={(value : string) => {
+												const item = data.find((v) => v.habit == value);
+												return item ? item.letter : value;
+											}}/>
+											<Legend
+												content={() => (
+													<div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
+														{data.map((item, index) => (
+															<div key={index} style={{ fontSize: '14px' }}>
+																<strong>{item.letter}</strong>: {item.habit}
+															</div>
+														))}
+													</div>
+												)}
+											/>
 											<PolarRadiusAxis />
-											<Radar name="Mike" dataKey="B" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+											<Radar name="n" dataKey="B" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
 											<RechartsDevtools />
 										</RadarChart>
 									) : (
@@ -184,25 +206,26 @@ function ModalStats() {
 									margin: "0"
 								}}>Averages</h3>
 								<div style={{
-									display: "flex"
+									display: "flex",
+									gap: "10px"
 								}}>
 									<div>
 										<h4 style={{
 											margin: "0.5rem 0 0.5rem 0"
 										}}>Sleep</h4>
 										<p style={{
-											fontSize: "10px"
-										}}>Daily Average</p>
-										<p>{avgSleep}hr</p>
+											fontSize: "8px"
+										}}>Daily Avg</p>
+										<p>{formatDuration(avgSleep)}</p>
 									</div>
 									<div>
 										<h4 style={{
 											margin: "0.5rem 0 0.5rem 0"
 										}}>Work</h4>
 										<p style={{
-											fontSize: "10px"
-										}}>Daily Average</p>
-										<p>{avgWork}hr</p>
+											fontSize: "8px"
+										}}>Daily Avg</p>
+										<p>{formatDuration(avgWork)}</p>
 									</div>
 								</div>
 							</div>

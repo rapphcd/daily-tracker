@@ -57,6 +57,8 @@ function DailyRecap() {
 										  border: "1px solid lightgrey",
 										  backgroundColor: "var(--background-primary)",
 										  boxShadow: "none",
+										  WebkitAppearance: "none",
+										  appearance: "none",
 									  }} onChange={(e) => {
 								saveTodayLog({
 									...selectedLog,
