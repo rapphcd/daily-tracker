@@ -5,7 +5,7 @@ import {
 	CartesianGrid,
 	Legend, Pie, PieChart, PolarAngleAxis,
 	PolarGrid, PolarRadiusAxis, Radar,
-	RadarChart,
+	RadarChart, Text,
 	Tooltip,
 	XAxis,
 	YAxis
@@ -14,6 +14,9 @@ import {RechartsDevtools} from "@recharts/devtools";
 import {useEffect, useState} from "react";
 
 const letters = ["A", "B", "C", "D", "E"]
+
+const legend = ["Sleep time", "Work time", "Other"]
+const colors = ["#8884d8", "#82ca9d", "#FFBB28"]
 
 function ModalStats() {
 	const { selectedLog, logs, setActiveLog} = useTracking();
@@ -24,7 +27,7 @@ function ModalStats() {
 	function formatDuration(hoursFloat : number) {
 		const h = Math.floor(hoursFloat);
 		const m = Math.round((hoursFloat - h) * 60);
-		return `${h}h ${m}m`;
+		return `${h}h${m != 0 ? ` ${m}m` : ""}`;
 	}
 
 	useEffect(() => {
@@ -108,17 +111,42 @@ function ModalStats() {
 								borderRadius: "var(--radius-l)",
 								padding: "1rem",
 								width: '100%',
-								flex: "1"
+								flex: "1",
+								display: "flex",
+								flexDirection: "column"
 							}}>
+								<div style={{ height: "fit-content"}}>
+									<h3  style={{
+										textAlign: "center",
+										padding: "0 1rem 0 1rem",
+										margin: "0",
+										marginBottom: "10px"
+									}}>Averages</h3>
+									<div style={{
+										display: "flex",
+										justifyContent: "space-around",
+										alignItems: "start",
+										gap: "10px"
+									}}>
+										<div>
+											<p style={{ fontSize: "20px", margin: "0"}}>{formatDuration(avgSleep)}</p>
+											<p style={{fontSize: "8px", marginTop: "0"}}>Avg. Sleep</p>
+										</div>
+										<div>
+											<p style={{ fontSize: "20px", margin: "0"}}>{formatDuration(avgWork)}</p>
+											<p style={{fontSize: "8px", marginTop: "0"}}>Avg. Work</p>
+										</div>
+									</div>
+								</div>
 								<BarChart
-									style={{ width: '100%', height: "100%", maxHeight: '90vh', aspectRatio: 1.618 }}
+									style={{ width: '100%', height: "100%", aspectRatio: 1.618, flex: "1" }}
 									responsive
 									data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 										const log = logs[k];
 										if(log != undefined){
 											return {name: log.date, sleeptime: log.sleepTime, worktime: log.workTime}
 										}
-										return undefined
+										return undefined;
 									})}
 									margin={{
 										top: 5,
@@ -142,91 +170,131 @@ function ModalStats() {
 								</BarChart>
 							</div>
 							<div style={{
-								backgroundColor: "var(--background-secondary)",
-								borderRadius: "var(--radius-l)",
-								padding: "0.2rem",
-								width: '100%',
-								flex: "1",
 								display: "flex",
-								justifyContent: "center",
-								alignItems: "center"
+								flexDirection: "column",
+								gap: "10px"
 							}}>
-								{
-									data.length >= 3 ? (
-										<RadarChart
-											style={{ width: '100%', height: "100%", aspectRatio: 1.2 }}
-											responsive
-											outerRadius="70%"
-											data={data}
-										>
-											<PolarGrid />
-											<PolarAngleAxis dataKey="habit" tickFormatter={(value : string) => {
-												const item = data.find((v) => v.habit == value);
-												return item ? item.letter : value;
-											}}/>
-											<Legend
-												content={() => (
-													<div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
-														{data.map((item, index) => (
-															<div key={index} style={{ fontSize: '14px' }}>
-																<strong>{item.letter}</strong>: {item.habit}
-															</div>
-														))}
-													</div>
-												)}
-											/>
-											<PolarRadiusAxis />
-											<Radar name="n" dataKey="B" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-											<RechartsDevtools />
-										</RadarChart>
-									) : (
-										<div style={{ width: '100%', height: '100%', display: "flex", justifyContent: "center", alignItems: "center" }}>
-											<h3>Habits graph unavailable.</h3>
-										</div>
-									)
-								}
-							</div>
-						</div>
-						<div style={{
-							display: "flex",
-							flexWrap: "nowrap",
-							gap: "10px"
-						}} >
-
-							<div  style={{
-								backgroundColor: "var(--background-secondary)",
-								borderRadius: "var(--radius-l)",
-								height: "fit-content",
-								padding: "1rem",
-								width: "100%"
-							}}>
-								<h3  style={{
-									textAlign: "center",
-									padding: "0 1rem 0 1rem",
-									margin: "0"
-								}}>Averages</h3>
 								<div style={{
-									display: "flex",
-									gap: "10px"
+									backgroundColor: "var(--background-secondary)",
+									borderRadius: "var(--radius-l)",
+									padding: "0.5rem",
+									width: '100%',
+									flex: "1",
 								}}>
-									<div>
-										<h4 style={{
-											margin: "0.5rem 0 0.5rem 0"
-										}}>Sleep</h4>
-										<p style={{
-											fontSize: "8px"
-										}}>Daily Avg</p>
-										<p>{formatDuration(avgSleep)}</p>
+									{
+										data.length >= 3 ? (
+											<RadarChart
+												style={{ width: '100%', height: "100%", aspectRatio: 1.2 }}
+												responsive
+												outerRadius="70%"
+												data={data}
+											>
+												<PolarGrid />
+												<PolarAngleAxis dataKey="habit" tickFormatter={(value : string) => {
+													const item = data.find((v) => v.habit == value);
+													return item ? item.letter : value;
+												}}/>
+												<Legend
+													content={() => (
+														<div style={{ display: 'flex', justifyContent: 'center', gap: '5px', marginTop: '5px', flexWrap: "wrap" }}>
+															{data.map((item, index) => (
+																<div key={index} style={{ fontSize: '10px' }}>
+																	<strong>{item.letter}</strong>: {item.habit}
+																</div>
+															))}
+														</div>
+													)}
+												/>
+												<PolarRadiusAxis />
+												<Radar name="n" dataKey="B" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+												<RechartsDevtools />
+											</RadarChart>
+										) : (
+											<div style={{ width: '100%', height: '100%', display: "flex", justifyContent: "center", alignItems: "center" }}>
+												<h3>Habits graph unavailable.</h3>
+											</div>
+										)
+									}
+								</div>
+								<div  style={{
+									backgroundColor: "var(--background-secondary)",
+									borderRadius: "var(--radius-l)",
+									padding: "1rem",
+									width: "100%"
+								}}>
+									<h3  style={{
+										textAlign: "center",
+										padding: "0 1rem 0 1rem",
+										margin: "0",
+										marginBottom: "10px"
+									}}>Last days</h3>
+									<div style={{
+										display: "flex",
+										justifyContent: "space-between",
+										alignItems: "center",
+										gap: "5px"
+									}}>
+										{
+											Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-4).map((k) => {
+												const log = logs[k];
+												if(log == undefined) return;
+												return (
+													<div key={log.date} style={{
+														display: "flex",
+														flexDirection: "column",
+														alignItems: "center",
+														justifyContent: "center`"
+													}}>
+														<h4 style={{
+															margin: "0",
+															paddingBottom: "10px",
+															fontSize: "9px"
+														}}>{log.date}</h4>
+														<PieChart style={{ width: '100%', height: 'fit-content', aspectRatio: 1 }} responsive>
+															<Pie
+																data={[
+																	{
+																		name: "Sleep time",
+																		value: log.sleepTime,
+																		fill: "#8884d8"
+																	},
+																	{
+																		name: "Work time",
+																		value: log.workTime,
+																		fill: "#82ca9d"
+																	},
+																	{
+																		name: "Other",
+																		value: 24-log.workTime-log.sleepTime,
+																		fill: "#FFBB28"
+																	}
+																]}
+																cx="50%"
+																cy="50%"
+																innerRadius="70%"
+																outerRadius="100%"
+																cornerRadius="50%"
+																fill="#8884d8"
+																paddingAngle={5}
+																dataKey="value"
+																isAnimationActive={true}
+															/>
+															<RechartsDevtools />
+														</PieChart>
+													</div>
+												)
+											})
+										}
 									</div>
-									<div>
-										<h4 style={{
-											margin: "0.5rem 0 0.5rem 0"
-										}}>Work</h4>
-										<p style={{
-											fontSize: "8px"
-										}}>Daily Avg</p>
-										<p>{formatDuration(avgWork)}</p>
+									<div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
+										{legend.map((label, index) => (
+											<div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: "10px", textWrap: "nowrap" }}>
+												<div style={{ width: '12px', height: '12px', backgroundColor: colors[index] }} />
+												<span>{label}</span>
+											</div>
+										))}
 									</div>
+
 								</div>
 							</div>
 						</div>
