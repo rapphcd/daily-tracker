@@ -73,10 +73,9 @@ function DailyRecap() {
 										marginBottom: "8px"
 									}}>Habits</h3>
 									<div style={{
-										display: "inline-grid",
-										gridAutoFlow: "column",
+										display: "flex",
 										gap: "1rem",
-										columnCount: Object.keys(selectedLog.habits).length
+										flexWrap: "wrap"
 									}}>
 										{
 											Object.keys(selectedLog.habits).map((habit) => (

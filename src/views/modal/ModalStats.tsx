@@ -5,7 +5,7 @@ import {
 	CartesianGrid,
 	Legend, Pie, PieChart, PolarAngleAxis,
 	PolarGrid, PolarRadiusAxis, Radar,
-	RadarChart, Text,
+	RadarChart,
 	Tooltip,
 	XAxis,
 	YAxis
