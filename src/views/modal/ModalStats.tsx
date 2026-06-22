@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import {RechartsDevtools} from "@recharts/devtools";
 import {useEffect, useState} from "react";
+import { Platform } from "obsidian";
 
 const letters = ["A", "B", "C", "D", "E"]
 
@@ -101,8 +102,9 @@ function ModalStats() {
 							padding: "0 1rem 0.5rem 1rem",
 							margin: "0"
 						}}>Statistics</h2>
-						<div style={{
+						<div className={"statCont"} style={{
 							display: "flex",
+							flexDirection: Platform.isMobile ? "column" : "row",
 							flexWrap: "nowrap",
 							gap: "10px"
 						}} >
