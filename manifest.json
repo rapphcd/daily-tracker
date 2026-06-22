@@ -3,7 +3,7 @@
 	"name": "Daily Tracker",
 	"version": "1.0.0",
 	"minAppVersion": "1.7.2",
-	"description": "Habit tracking and daily statistics directly in Obsidian.",
+	"description": "Habit tracking and daily statistics.",
 	"author": "rapphcd",
 	"authorUrl": "https://raphaelparmentier.fr",
 	"fundingUrl": "https://raphaelparmentier.fr",

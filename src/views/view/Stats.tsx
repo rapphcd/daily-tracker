@@ -1,6 +1,5 @@
 import {useTracking} from "../TrackingContext";
 import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
-import {RechartsDevtools} from '@recharts/devtools';
 import StatsModal from "../modal";
 import {setIcon} from "obsidian";
 import {useEffect, useRef} from "react";
@@ -79,7 +78,6 @@ function Stats() {
 					     onClick={(b) => {
 							 if (b.name != undefined) setActiveLog(b.name, false);
 						 }} radius={[5, 5, 0, 0]}/>
-					<RechartsDevtools/>
 				</BarChart>
 			</div>
 		</div>

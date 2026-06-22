@@ -10,7 +10,6 @@ import {
 	XAxis,
 	YAxis
 } from "recharts";
-import {RechartsDevtools} from "@recharts/devtools";
 import {useEffect, useState} from "react";
 import { Platform } from "obsidian";
 
@@ -168,7 +167,6 @@ function ModalStats() {
 									<Bar dataKey="worktime" fill="#82ca9d" activeBar={{ fill: '#82ca9d', stroke: 'black' }} onClick={(b) => {
 										if(b.name != undefined) setActiveLog(b.name, false);
 									}} radius={[5, 5, 0, 0]} />
-									<RechartsDevtools />
 								</BarChart>
 							</div>
 							<div style={{
@@ -209,7 +207,6 @@ function ModalStats() {
 												/>
 												<PolarRadiusAxis />
 												<Radar name="n" dataKey="B" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-												<RechartsDevtools />
 											</RadarChart>
 										) : (
 											<div style={{ width: '100%', height: '100%', display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -281,7 +278,6 @@ function ModalStats() {
 																dataKey="value"
 																isAnimationActive={true}
 															/>
-															<RechartsDevtools />
 														</PieChart>
 													</div>
 												)
