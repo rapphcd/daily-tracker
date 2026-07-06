@@ -1,11 +1,13 @@
-import {ChangeEvent} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {useTracking} from "../TrackingContext";
 
 function DailyRecap() {
 	const {saveTodayLog, selectedLog} = useTracking();
 
+	const [sleepStart, setSleepStart] = useState("");
+	const [sleepEnd, setSleepEnd] = useState("");
 
-	const handleChange = (e: ChangeEvent<HTMLInputElement>, type: "workTime" | "sleepTime") => {
+	const handleWorkTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (selectedLog == undefined) return;
 		let valeur = e.target.value;
 		if (valeur === '') {
@@ -25,9 +27,11 @@ function DailyRecap() {
 
 		saveTodayLog({
 			...selectedLog,
-			[type]: num
+			workTime: num
 		});
 	}
+
+
 
 	return (
 		<div style={{
@@ -141,7 +145,7 @@ function DailyRecap() {
 										backgroundColor: "var(--background-primary)",
 										textAlign: "center"
 									}} type="number" name="worktime" id="worktime" min={0} step={0.5} max={24}
-									       value={selectedLog.workTime} onChange={(e) => handleChange(e, "workTime")}/>
+									       value={selectedLog.workTime} onChange={(e) => handleWorkTimeChange(e)}/>
 									<button onClick={() => {
 										if (selectedLog == undefined) return;
 
@@ -165,43 +169,18 @@ function DailyRecap() {
 								<h3 style={{
 									marginBottom: "0",
 									textWrap: "nowrap"
-								}}>Sleep time</h3>
+								}}>Sleep </h3>
 								<div style={{
 									display: "flex",
 									justifyContent: "space-around",
 									alignItems: "center"
 								}}>
-									<button onClick={() => {
-										if (selectedLog == undefined) return;
-
-										if (selectedLog.sleepTime == 0) return;
-
-										saveTodayLog({
-											...selectedLog,
-											sleepTime: selectedLog.sleepTime - 1
-										});
-									}}>-
-									</button>
-									<input style={{
-										width: "min-content",
-										border: "none",
-										padding: 0,
-										boxShadow: "none",
-										backgroundColor: "var(--background-primary)",
-										textAlign: "center"
-									}} type="number" name="sleeptime" id="sleeptime" min={0} step={0.5} max={24}
-									       value={selectedLog.sleepTime} onChange={(e) => handleChange(e, "sleepTime")}/>
-									<button onClick={() => {
-										if (selectedLog == undefined) return;
-
-										if (selectedLog.sleepTime == 24) return;
-
-										saveTodayLog({
-											...selectedLog,
-											sleepTime: selectedLog.sleepTime + 1
-										});
-									}}>+
-									</button>
+									<input type={"time"} onChange={(e) => {
+										setSleepStart(e.target.value)
+									}}/>
+									<input type={"time"} onChange={(e) => {
+										setSleepEnd(e.target.value)
+									}}/>
 								</div>
 							</div>
 						</div>

@@ -3,7 +3,11 @@ export type DailyLog = {
 	summary: string;
 	habits: Record<string, boolean>;
 	workTime: number;
-	sleepTime: number;
+	sleep: {
+		time: number,
+		start: string,
+		end: string
+	};
 }
 
 export type Logs = Record<string, DailyLog>

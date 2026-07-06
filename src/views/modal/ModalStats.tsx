@@ -40,7 +40,7 @@ function ModalStats() {
 				if(log == undefined) continue;
 
 				sleep.nb += 1;
-				sleep.hr += log.sleepTime;
+				sleep.hr += log.sleep.time;
 
 				work.nb += 1;
 				work.hr += log.workTime;
@@ -145,7 +145,7 @@ function ModalStats() {
 									data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 										const log = logs[k];
 										if(log != undefined){
-											return {name: log.date, sleeptime: log.sleepTime, worktime: log.workTime}
+											return {name: log.date, sleeptime: log.sleep.time, worktime: log.workTime}
 										}
 										return undefined;
 									})}
@@ -254,7 +254,7 @@ function ModalStats() {
 																data={[
 																	{
 																		name: "Sleep time",
-																		value: log.sleepTime,
+																		value: log.sleep.time,
 																		fill: "#8884d8"
 																	},
 																	{
@@ -264,7 +264,7 @@ function ModalStats() {
 																	},
 																	{
 																		name: "Other",
-																		value: 24-log.workTime-log.sleepTime,
+																		value: 24-log.workTime-log.sleep.time,
 																		fill: "#FFBB28"
 																	}
 																]}

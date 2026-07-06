@@ -54,7 +54,7 @@ function Stats() {
 					data={Object.keys(logs).sort((a, b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 						const log = logs[k];
 						if (log != undefined) {
-							return {name: log.date, sleeptime: log.sleepTime, worktime: log.workTime}
+							return {name: log.date, sleep: log.sleep, worktime: log.workTime}
 						}
 						return undefined
 					})}
