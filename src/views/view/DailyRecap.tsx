@@ -4,8 +4,8 @@ import {useTracking} from "../TrackingContext";
 function DailyRecap() {
 	const {saveTodayLog, selectedLog} = useTracking();
 
-	const [sleepStart, setSleepStart] = useState("");
-	const [sleepEnd, setSleepEnd] = useState("");
+	const [sleepStart, setSleepStart] = useState(selectedLog?.sleep.start || "");
+	const [sleepEnd, setSleepEnd] = useState(selectedLog?.sleep.end || "");
 
 	const handleWorkTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (selectedLog == undefined) return;
@@ -30,6 +30,34 @@ function DailyRecap() {
 			workTime: num
 		});
 	}
+
+	useEffect(() => {
+		const getMinutesTime = (time: string) => {
+			const mins = time.split(":")[1] || "0";
+			const hours = time.split(":")[0] || "0";
+
+			return parseInt(hours) * 60 + parseInt(mins);
+		}
+		const updateSleepTime = () => {
+			if (selectedLog == undefined || sleepStart == "" || sleepEnd == "") return;
+			const sleepStartMin = getMinutesTime(sleepStart);
+			const sleepEndMin = getMinutesTime(sleepEnd);
+
+			let timeGap = sleepEndMin - sleepStartMin;
+
+			if (timeGap < 0) timeGap+=24*60;
+
+			saveTodayLog({
+				...selectedLog,
+				sleep: {
+					start: sleepStart,
+					end: sleepEnd,
+					time: timeGap
+				}
+			});
+		}
+		updateSleepTime()
+	}, [sleepStart, sleepEnd]);
 
 
 
@@ -169,16 +197,16 @@ function DailyRecap() {
 								<h3 style={{
 									marginBottom: "0",
 									textWrap: "nowrap"
-								}}>Sleep </h3>
+								}}>Sleep ({Math.floor(selectedLog.sleep.time/60)}h {selectedLog.sleep.time%60})</h3>
 								<div style={{
 									display: "flex",
 									justifyContent: "space-around",
 									alignItems: "center"
 								}}>
-									<input type={"time"} onChange={(e) => {
+									<input type={"time"} value={sleepStart} onChange={(e) => {
 										setSleepStart(e.target.value)
 									}}/>
-									<input type={"time"} onChange={(e) => {
+									<input type={"time"} value={sleepEnd} onChange={(e) => {
 										setSleepEnd(e.target.value)
 									}}/>
 								</div>
