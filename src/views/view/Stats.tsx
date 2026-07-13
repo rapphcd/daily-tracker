@@ -53,10 +53,11 @@ function Stats() {
 					responsive
 					data={Object.keys(logs).sort((a, b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 						const log = logs[k];
-						if (log != undefined) {
-							return {name: log.date, sleep: log.sleep, worktime: log.workTime}
+						if(log != undefined && log.sleep != undefined){
+							const [m,j] = log.date.split("-").slice(1);
+							return {name: `${j}/${m}`, sleeptime: Math.round((log.sleep.time/60)*100)/100, worktime: log.workTime}
 						}
-						return undefined
+						return undefined;
 					})}
 					margin={{
 						top: 5,
@@ -68,7 +69,7 @@ function Stats() {
 					<CartesianGrid strokeDasharray="3 3"/>
 					<XAxis dataKey="name"/>
 					<YAxis width="auto"/>
-					<Tooltip/>
+					<Tooltip labelStyle={{ color: 'var(--text-normal)' }} contentStyle={{backgroundColor: 'var(--background-primary)', borderColor: 'var(--background-modifier-border)'}}/>
 					<Legend/>
 					<Bar dataKey="sleeptime" fill="#8884d8" activeBar={{fill: '#8884d8', stroke: 'black'}}
 					     onClick={(b) => {

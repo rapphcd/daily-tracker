@@ -4,20 +4,20 @@ import {useTracking} from "../TrackingContext";
 function DailyRecap() {
 	const {saveTodayLog, selectedLog} = useTracking();
 
-	const [sleepStart, setSleepStart] = useState(selectedLog?.sleep.start || "");
-	const [sleepEnd, setSleepEnd] = useState(selectedLog?.sleep.end || "");
+	const [sleepStart, setSleepStart] = useState(selectedLog?.sleep ? selectedLog?.sleep.start || "" : "");
+	const [sleepEnd, setSleepEnd] = useState(selectedLog?.sleep ? selectedLog?.sleep.end || "" : "");
 
 	const handleWorkTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (selectedLog == undefined) return;
 		let valeur = e.target.value;
-		if (valeur === '') {
-			e.target.value = "";
-			return;
+		let num = 0;
+
+		if (valeur != "") {
+			e.target.value = "0";
+			num = parseFloat(valeur);
 		}
 
-		let num = parseFloat(valeur);
-
-		if (num < 0) {
+		if (num <= 0) {
 			e.target.value = "0";
 			num = 0
 		} else if (num > 24) {
@@ -45,7 +45,7 @@ function DailyRecap() {
 
 			let timeGap = sleepEndMin - sleepStartMin;
 
-			if (timeGap < 0) timeGap+=24*60;
+			if (timeGap < 0) timeGap += 24 * 60;
 
 			saveTodayLog({
 				...selectedLog,
@@ -59,6 +59,12 @@ function DailyRecap() {
 		updateSleepTime()
 	}, [sleepStart, sleepEnd]);
 
+	useEffect(() => {
+		if(selectedLog?.sleep){
+			setSleepEnd(selectedLog.sleep.end);
+			setSleepStart(selectedLog.sleep.start)
+		}
+	}, [selectedLog]);
 
 
 	return (
@@ -69,7 +75,7 @@ function DailyRecap() {
 			padding: "0 1rem 1.5rem 1rem"
 		}}>
 			{
-				selectedLog != undefined && (
+				selectedLog != undefined  && (
 					<div key={selectedLog.date}>
 						<h2 style={{
 							textAlign: "center",
@@ -137,6 +143,7 @@ function DailyRecap() {
 						<div style={{
 							display: "flex",
 							justifyContent: "space-between",
+							alignItems: "start",
 							flexWrap: "wrap"
 						}}>
 							<div style={{
@@ -157,11 +164,11 @@ function DailyRecap() {
 									<button onClick={() => {
 										if (selectedLog == undefined) return;
 
-										if (selectedLog.workTime == 0) return;
+										if (selectedLog.workTime-0.5 < 0) return;
 
 										saveTodayLog({
 											...selectedLog,
-											workTime: selectedLog.workTime - 1
+											workTime: selectedLog.workTime - 0.5
 										});
 									}}>-
 									</button>
@@ -177,40 +184,67 @@ function DailyRecap() {
 									<button onClick={() => {
 										if (selectedLog == undefined) return;
 
-										if (selectedLog.workTime == 24) return;
+										if (selectedLog.workTime+0.5 > 24) return;
 
 										saveTodayLog({
 											...selectedLog,
-											workTime: selectedLog.workTime + 1
+											workTime: selectedLog.workTime + 0.5
 										});
 									}}>+
 									</button>
 								</div>
 							</div>
-							<div style={{
-								width: "50%",
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "start",
-								alignItems: "start"
-							}}>
-								<h3 style={{
-									marginBottom: "0",
-									textWrap: "nowrap"
-								}}>Sleep ({Math.floor(selectedLog.sleep.time/60)}h {selectedLog.sleep.time%60})</h3>
-								<div style={{
-									display: "flex",
-									justifyContent: "space-around",
-									alignItems: "center"
-								}}>
-									<input type={"time"} value={sleepStart} onChange={(e) => {
-										setSleepStart(e.target.value)
-									}}/>
-									<input type={"time"} value={sleepEnd} onChange={(e) => {
-										setSleepEnd(e.target.value)
-									}}/>
-								</div>
-							</div>
+							{
+								selectedLog.sleep != undefined && (
+									<div style={{
+										width: "50%",
+										display: "flex",
+										flexDirection: "column",
+										justifyContent: "start",
+										alignItems: "start"
+									}}>
+										<style>{`input[type="time"].dropdown{background-image: none;padding-right: 4px;}`}</style>
+										<h3 style={{
+											marginBottom: "0",
+											textWrap: "nowrap"
+										}}>Sleep ({Math.floor(selectedLog.sleep.time / 60)}h{(selectedLog.sleep.time % 60) != 0 ? ` ${selectedLog.sleep.time % 60}m` : ""})</h3>
+										<div className={"settings-item-control"} style={{
+											display: "grid",
+											width: "fit-content",
+											gridTemplateColumns: "repeat(2, 1fr)",
+											gridTemplateRows: "repeat(2, 1fr)",
+											gap: "0.1rem",
+										}}>
+											<p style={{
+												margin: 0,
+												width: "fit-content"
+											}}>from</p>
+											<input type={"time"} className={"dropdown"} style={{
+												border: '1px solid var(--border-color)',
+												color: 'var(--text-normal)',
+												fontFamily: 'var(--font-interface)',
+												borderRadius: 'var(--radius-s)',
+												outline: 'none'
+											}} value={sleepStart} onChange={(e) => {
+												setSleepStart(e.target.value)
+											}}/>
+											<p style={{
+												margin: 0,
+												width: "fit-content"
+											}}>to</p>
+											<input type={"time"} className={"dropdown"} style={{
+												border: '1px solid var(--border-color)',
+												color: 'var(--text-normal)',
+												fontFamily: 'var(--font-interface)',
+												borderRadius: 'var(--radius-s)',
+												outline: 'none'
+											}} value={sleepEnd} onChange={(e) => {
+												setSleepEnd(e.target.value)
+											}}/>
+										</div>
+									</div>
+								)
+							}
 						</div>
 					</div>
 				)

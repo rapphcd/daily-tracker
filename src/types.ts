@@ -7,7 +7,7 @@ export type DailyLog = {
 		time: number,
 		start: string,
 		end: string
-	};
+	} | undefined;
 }
 
 export type Logs = Record<string, DailyLog>

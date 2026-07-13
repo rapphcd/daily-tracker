@@ -37,10 +37,10 @@ function ModalStats() {
 			const work : { nb: number, hr: number} = { nb: 0, hr: 0};
 			for(const key of Object.keys(logs).slice(-30)){
 				const log = logs[key];
-				if(log == undefined) continue;
+				if(log == undefined || log.sleep == undefined) continue;
 
 				sleep.nb += 1;
-				sleep.hr += log.sleep.time;
+				sleep.hr += log.sleep.time/60;
 
 				work.nb += 1;
 				work.hr += log.workTime;
@@ -114,7 +114,8 @@ function ModalStats() {
 								width: '100%',
 								flex: "1",
 								display: "flex",
-								flexDirection: "column"
+								flexDirection: "column",
+								justifyContent: "space-between"
 							}}>
 								<div style={{ height: "fit-content"}}>
 									<h3  style={{
@@ -139,35 +140,39 @@ function ModalStats() {
 										</div>
 									</div>
 								</div>
-								<BarChart
-									style={{ width: '100%', height: "100%", aspectRatio: 1.618, flex: "1" }}
-									responsive
-									data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
-										const log = logs[k];
-										if(log != undefined){
-											return {name: log.date, sleeptime: log.sleep.time, worktime: log.workTime}
-										}
-										return undefined;
-									})}
-									margin={{
-										top: 5,
-										right: 0,
-										left: 0,
-										bottom: 5,
-									}}
-								>
-									<CartesianGrid strokeDasharray="3 3" />
-									<XAxis dataKey="name" />
-									<YAxis width="auto" />
-									<Tooltip />
-									<Legend />
-									<Bar dataKey="sleeptime" fill="#8884d8" activeBar={{ fill: '#8884d8', stroke: 'black' }} onClick={(b) => {
-										if(b.name != undefined) setActiveLog(b.name, false);
-									}} radius={[5, 5, 0, 0]} />
-									<Bar dataKey="worktime" fill="#82ca9d" activeBar={{ fill: '#82ca9d', stroke: 'black' }} onClick={(b) => {
-										if(b.name != undefined) setActiveLog(b.name, false);
-									}} radius={[5, 5, 0, 0]} />
-								</BarChart>
+								<div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+
+									<BarChart
+										style={{ width: '100%', height: "fit-content", aspectRatio: 0.8 }}
+										responsive
+										data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
+											const log = logs[k];
+											if(log != undefined && log.sleep != undefined){
+												const [m,j] = log.date.split("-").slice(1);
+												return {name: `${j}/${m}`, sleeptime: Math.round((log.sleep.time/60)*100)/100, worktime: log.workTime}
+											}
+											return undefined;
+										})}
+										margin={{
+											top: 5,
+											right: 0,
+											left: 0,
+											bottom: 5,
+										}}
+									>
+										<CartesianGrid strokeDasharray="3 3"/>
+										<XAxis dataKey="name" />
+										<YAxis width="auto" />
+										<Tooltip labelStyle={{ color: 'var(--text-normal)' }} contentStyle={{backgroundColor: 'var(--background-primary)', borderColor: 'var(--background-modifier-border)'}}/>
+										<Legend />
+										<Bar dataKey="sleeptime" fill="#8884d8" activeBar={{ fill: '#8884d8', stroke: 'black' }} onClick={(b) => {
+											if(b.name != undefined) setActiveLog(b.name, false);
+										}} radius={[5, 5, 0, 0]} />
+										<Bar dataKey="worktime" fill="#82ca9d" activeBar={{ fill: '#82ca9d', stroke: 'black' }} onClick={(b) => {
+											if(b.name != undefined) setActiveLog(b.name, false);
+										}} radius={[5, 5, 0, 0]} />
+									</BarChart>
+								</div>
 							</div>
 							<div style={{
 								display: "flex",
@@ -234,27 +239,29 @@ function ModalStats() {
 										gap: "5px"
 									}}>
 										{
-											Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-4).map((k) => {
+											Object.keys(logs).filter((a) => logs[a] != undefined && logs[a].sleep != undefined).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-4).map((k) => {
 												const log = logs[k];
-												if(log == undefined) return;
+												if(log == undefined || log.sleep == undefined) return;
+												const [m,j] = log.date.split("-").slice(1);
 												return (
 													<div key={log.date} style={{
 														display: "flex",
 														flexDirection: "column",
 														alignItems: "center",
-														justifyContent: "center`"
+														justifyContent: "center`",
+														width: "100%"
 													}}>
 														<h4 style={{
 															margin: "0",
 															paddingBottom: "10px",
-															fontSize: "9px"
-														}}>{log.date}</h4>
+															fontSize: "9px",
+														}}>{j}/{m}</h4>
 														<PieChart style={{ width: '100%', height: 'fit-content', aspectRatio: 1 }} responsive>
 															<Pie
 																data={[
 																	{
 																		name: "Sleep time",
-																		value: log.sleep.time,
+																		value: log.sleep.time/60,
 																		fill: "#8884d8"
 																	},
 																	{
@@ -264,13 +271,13 @@ function ModalStats() {
 																	},
 																	{
 																		name: "Other",
-																		value: 24-log.workTime-log.sleep.time,
+																		value: 24-log.workTime-(log.sleep.time/60),
 																		fill: "#FFBB28"
 																	}
 																]}
 																cx="50%"
 																cy="50%"
-																innerRadius="70%"
+																innerRadius="75%"
 																outerRadius="100%"
 																cornerRadius="50%"
 																fill="#8884d8"
