@@ -14,7 +14,7 @@ export function ReactView(){
 			<h1 style={{
 				marginBottom: "0",
 				marginTop: "0"
-			}}>Daily Tracking</h1>
+			}}>Daily Tracker</h1>
 			<DailyRecap></DailyRecap>
 			<div style={{
 				display: "flex",

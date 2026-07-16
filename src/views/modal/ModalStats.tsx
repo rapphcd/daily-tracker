@@ -143,15 +143,16 @@ function ModalStats() {
 								<div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
 
 									<BarChart
-										style={{ width: '100%', height: "fit-content", aspectRatio: 0.8 }}
+										style={{ width: '100%', height: "fit-content", aspectRatio: 0.5 }}
 										responsive
 										data={Object.keys(logs).sort((a,b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 											const log = logs[k];
-											if(log != undefined && log.sleep != undefined){
-												const [m,j] = log.date.split("-").slice(1);
+											if(log == undefined) return undefined;
+											const [m,j] = log.date.split("-").slice(1);
+											if(log.sleep != undefined){
 												return {name: `${j}/${m}`, sleeptime: Math.round((log.sleep.time/60)*100)/100, worktime: log.workTime}
 											}
-											return undefined;
+											return {name: `${j}/${m}`, sleeptime: 0, worktime: 0};
 										})}
 										margin={{
 											top: 5,
@@ -167,10 +168,10 @@ function ModalStats() {
 										<Legend />
 										<Bar dataKey="sleeptime" fill="#8884d8" activeBar={{ fill: '#8884d8', stroke: 'black' }} onClick={(b) => {
 											if(b.name != undefined) setActiveLog(b.name, false);
-										}} radius={[5, 5, 0, 0]} />
+										}} radius={[3, 3, 0, 0]} />
 										<Bar dataKey="worktime" fill="#82ca9d" activeBar={{ fill: '#82ca9d', stroke: 'black' }} onClick={(b) => {
 											if(b.name != undefined) setActiveLog(b.name, false);
-										}} radius={[5, 5, 0, 0]} />
+										}} radius={[3, 3, 0, 0]} />
 									</BarChart>
 								</div>
 							</div>

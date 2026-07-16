@@ -52,7 +52,7 @@ function MonthRecap(){
 	return (
 		<div style={{
 			backgroundColor: "var(--background-primary)",
-			borderRadius: "var(--radius-l)",
+			borderRadius: "var(--radius-m)",
 			height: "max-content",
 			width: "100%",
 			padding: "0 1rem 1.5rem 1rem"

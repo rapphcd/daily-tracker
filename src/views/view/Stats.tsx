@@ -17,7 +17,7 @@ function Stats() {
 	return (
 		<div style={{
 			backgroundColor: "var(--background-primary)",
-			borderRadius: "var(--radius-l)",
+			borderRadius: "var(--radius-m)",
 			height: "max-content",
 			minHeight: "100px",
 			width: "100%",
@@ -53,11 +53,12 @@ function Stats() {
 					responsive
 					data={Object.keys(logs).sort((a, b) => new Date(a) > new Date(b) ? 1 : -1).slice(-7).map((k) => {
 						const log = logs[k];
-						if(log != undefined && log.sleep != undefined){
-							const [m,j] = log.date.split("-").slice(1);
+						if(log == undefined) return undefined;
+						const [m,j] = log.date.split("-").slice(1);
+						if(log.sleep != undefined){
 							return {name: `${j}/${m}`, sleeptime: Math.round((log.sleep.time/60)*100)/100, worktime: log.workTime}
 						}
-						return undefined;
+						return {name: `${j}/${m}`, sleeptime: 0, worktime: 0};
 					})}
 					margin={{
 						top: 5,

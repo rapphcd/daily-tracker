@@ -70,7 +70,7 @@ function DailyRecap() {
 	return (
 		<div style={{
 			backgroundColor: "var(--background-primary)",
-			borderRadius: "var(--radius-l)",
+			borderRadius: "var(--radius-m)",
 			height: "fit-content",
 			padding: "0 1rem 1.5rem 1rem"
 		}}>
@@ -219,7 +219,7 @@ function DailyRecap() {
 												margin: 0,
 												width: "fit-content"
 											}}>from</p>
-											<input type={"time"} className={"dropdown"} style={{
+											<input type={"time"} step={600} className={"dropdown"} style={{
 												border: '1px solid var(--border-color)',
 												color: 'var(--text-normal)',
 												fontFamily: 'var(--font-interface)',
@@ -232,7 +232,7 @@ function DailyRecap() {
 												margin: 0,
 												width: "fit-content"
 											}}>to</p>
-											<input type={"time"} className={"dropdown"} style={{
+											<input type={"time"} step={600} className={"dropdown"} style={{
 												border: '1px solid var(--border-color)',
 												color: 'var(--text-normal)',
 												fontFamily: 'var(--font-interface)',
