@@ -6,11 +6,11 @@ import {useEffect, useRef} from "react";
 
 function Stats() {
 	const {logs, setActiveLog, app, plugin} = useTracking();
-	const buttonRef = useRef<HTMLButtonElement>(null);
+	const externalIconRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
-		if (buttonRef.current) {
-			setIcon(buttonRef.current, "external-link");
+		if (externalIconRef.current) {
+			setIcon(externalIconRef.current, "external-link");
 		}
 	}, []);
 
@@ -41,7 +41,7 @@ function Stats() {
 				textAlign: "center",
 				padding: "1rem",
 				margin: "0"
-			}}>Statistics <button ref={buttonRef} className={"stats-btn"} onClick={() => {
+			}}>Statistics <button ref={externalIconRef} className={"stats-btn"} onClick={() => {
 				new StatsModal(app, plugin).open();
 			}}>O</button></h2>
 			<div style={{
