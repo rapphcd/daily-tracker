@@ -8,6 +8,7 @@ export type DailyLog = {
 		start: string,
 		end: string
 	} | undefined;
+	mood: number | undefined;
 }
 
 export type Logs = Record<string, DailyLog>

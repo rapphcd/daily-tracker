@@ -105,6 +105,28 @@ function DailyRecap() {
 							}}></textarea>
 						</div>
 						{
+							selectedLog.mood != undefined && (
+								<div>
+									<h3 style={{
+										marginBottom: "8px"
+									}}>Mood</h3>
+									<input type="range" name="note" id="note" min={"1"} max={"5"} list={"values"} style={{ width: "100%" }} defaultValue={selectedLog.mood} onChange={(e) => {
+										saveTodayLog({
+											...selectedLog,
+											mood: parseInt(e.target.value)
+										});
+									}}></input>
+									<div className="labels" style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "start", padding: '0 0.30rem 0 0.5rem' }}>
+										<span>☹️</span>
+										<span>😕</span>
+										<span>😐</span>
+										<span>😀</span>
+										<span>😁</span>
+									</div>
+								</div>
+							)
+						}
+						{
 							Object.keys(selectedLog.habits).length > 0 && (
 								<div>
 									<h3 style={{
