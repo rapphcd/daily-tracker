@@ -60,7 +60,7 @@ function TrackingProvider({children, plugin, saveLogs, app}: Props) {
 			for(const h of plugin.settings.habits){
 				hab[h] = false;
 			}
-			const newLog = {habits: hab, sleep: {time: 0, start: "", end: ""}, summary: "", workTime: 0, date: date, mood: 3};
+			const newLog : DailyLog = {habits: hab, sleep: {time: 0, start: "", end: ""}, summary: "", workTime: 0, date: date, mood: 3};
 			setLogs(prev => ({...prev, [date]: newLog}));
 		}
 		setSelectedDate(date);

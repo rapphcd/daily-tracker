@@ -111,9 +111,13 @@ function DailyRecap() {
 										marginBottom: "8px"
 									}}>Mood</h3>
 									<input type="range" name="note" id="note" min={"1"} max={"5"} list={"values"} style={{ width: "100%" }} defaultValue={selectedLog.mood} onChange={(e) => {
+										const value = e.target.valueAsNumber;
+										if(value > 5 || value < 1) return;
+										type Mood = 1 | 2 | 3 | 4 | 5;
+										const val = value as Mood;
 										saveTodayLog({
 											...selectedLog,
-											mood: parseInt(e.target.value)
+											mood: val
 										});
 									}}></input>
 									<div className="labels" style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "start", padding: '0 0.30rem 0 0.5rem' }}>
