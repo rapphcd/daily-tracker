@@ -2,12 +2,13 @@
 
 Habit tracking and daily statistics directly in Obsidian.
 ## Overview
-Daily Tracker is an Obsidian plugin designed to help users monitor their daily habits and productivity. It features an interactive sidebar view for log management, custom habit checkboxes, sleep and work time logging, and a dedicated analytics modal with detailed visual statistics (including bar, radar, and pie charts).
+Daily Tracker is an Obsidian plugin designed to help users monitor their daily habits, productivity and mood. It features an interactive sidebar view for log management, custom habit checkboxes, sleep and work time logging, and a dedicated analytics modal with detailed visual statistics (including bar, radar, and pie charts).
 
 ## Features
 - **Right Sidebar View:** An integrated React-based sidebar pane for quick, convenient daily logging.
 - **Habit Tracking:** Monitor up to 5 custom habits.
 - **Time Logging:** Log work and sleep duration (0-24 hours range with 30-minute intervals).
+- **Mood Tracking:** Track your mood everyday.
 - **Daily Summaries:** Enter a text summary/recap of the day (up to 400 characters).
 - **Interactive Calendar:** A monthly calendar showing days with notes. Click to load past logs, or double-click to create new ones.
 - **Advanced Visual Analytics:**
@@ -30,7 +31,7 @@ Daily Tracker is an Obsidian plugin designed to help users monitor their daily h
 
 ## How to use ?
 - **Open Tracking View:** Click the calendar ribbon icon in the left sidebar to open the Daily Tracker view in the right sidebar.
-- **Log Daily Data:** Write a brief recap of your day under the **Summary** section, check off completed habits, and adjust your work and sleep hours using the counter buttons (`-` / `+`) or number input fields.
+- **Log Daily Data:** Write a brief recap of your day under the **Summary** section, check off completed habits, and adjust your mood, work and sleep hours using the counter buttons (`-` / `+`) or number input fields.
 - **Switch Dates:** Click on any date on the monthly calendar. Dates underlined have existing logs. Click to load, or double-click to initialize a log entry for a past day.
 - **View Statistics Modal:** Click the external link button next to "Statistics" in the sidebar, or run the command `Daily Tracker: Show statistics` from the Obsidian command palette (`Ctrl/Cmd + P`).
 - **Manage Habits:** Go to Obsidian's **Settings → Daily Tracker** to configure default habits.
